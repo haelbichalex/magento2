@@ -74,7 +74,13 @@ class FrontSpecialPrice extends Price
         }
 
         $specialPrices = $this->getSpecialPrices($product);
-        $specialPrice = !(empty($specialPrices)) ? min($specialPrices) : $product->getSpecialPrice();
+        if (!(empty($specialPrices))) {
+            if (array_key_exists($this->_storeManager->getStore()->getId(), $specialPrices)) {
+                $specialPrice = $specialPrices[$this->_storeManager->getStore()->getId()];
+            }
+        } else {
+            $specialPrice = $product->getSpecialPrice();
+        }
 
         $specialPrice =  $this->calculateSpecialPrice(
             $finalPrice,
